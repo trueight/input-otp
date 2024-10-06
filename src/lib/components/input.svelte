@@ -1,19 +1,19 @@
 <script lang="ts">
+	import { globalValues } from '$lib/stores/global-values.svelte.js';
 	import { withPrevious } from '$lib/stores/previous.svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
 	type SelectionState = [number, number, SelectionDirection | undefined];
 	interface Props {
 		maxLength: number;
-		defaultValue?: string;
+		value?: string;
 	}
 
 	let inputElement: HTMLInputElement;
-	const { maxLength = 6, defaultValue = '' }: Props = $props();
-	const [newValue, previousValue] = withPrevious(defaultValue);
+	let { maxLength = 6, value = $bindable('') }: Props = $props();
+	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
 	const [newSelectionEnd, previousSelectionEnd] = withPrevious(0);
 	const [newSelectionDirection, previousSelectionDirection] = withPrevious('none');
-
 	const previousSelectionState: SelectionState = [
 		$previousSelectionStart ?? 0,
 		$previousSelectionEnd ?? 0,
@@ -99,6 +99,11 @@
 			$newValue.length < $previousValue.length
 		) {
 			inputElement.dispatchEvent(new Event('selectionchange'));
+		}
+
+		if ($newValue !== $previousValue) {
+			value = $newValue;
+			$globalValues.otp.currentValue = $newValue;
 		}
 	});
 </script>
