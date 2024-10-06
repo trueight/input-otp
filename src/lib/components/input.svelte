@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { withPrevious } from '$lib/stores/previous.svelte';
-	import Monitor from './monitor.svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
 	type SelectionState = [number, number, SelectionDirection | undefined];
 	interface Props {
@@ -109,11 +108,4 @@
 	bind:this={inputElement}
 	bind:value={$newValue}
 	maxlength={maxLength}
-/>
-
-<Monitor
-	{maxLength}
-	newValue={$newValue}
-	newSelectionStart={$newSelectionStart}
-	newSelectionEnd={$newSelectionEnd}
 />
