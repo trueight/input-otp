@@ -1,6 +1,6 @@
 {
-	"name": "input-otp",
-	"version": "0.0.1",
+	"name": "otp-svelte",
+	"version": "0.0.3",
 	"description": "A Svelte port of React Input-OTP",
 	"author": "trueight",
 	"license": "MIT",
