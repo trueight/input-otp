@@ -1,15 +1,17 @@
 <script lang="ts">
-	import { globalValues } from '$lib/stores/global-values.svelte.js';
-	import { withPrevious } from '$lib/stores/previous.svelte';
+	import { withPrevious } from '$lib/stores/stores.js';
+	import { globalNewValue, globalInsertMode, globalSelectionStart, globalSelectionEnd } from '$lib/stores/stores.js';
+	import type { Snippet } from 'svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
 	type SelectionState = [number, number, SelectionDirection | undefined];
 	interface Props {
 		maxLength: number;
 		value?: string;
+		children: Snippet;
 	}
 
 	let inputElement: HTMLInputElement;
-	let { maxLength = 6, value = $bindable('') }: Props = $props();
+	let { maxLength = 6, value = $bindable(''), children }: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
 	const [newSelectionEnd, previousSelectionEnd] = withPrevious(0);
@@ -44,6 +46,7 @@
 		if ($newValue.length !== 0) {
 			const caretIsSingle = isSingleCaret($newSelectionStart, $newSelectionEnd);
 			const insertMode = isInsertMode($newSelectionStart, $newValue);
+			$globalInsertMode = insertMode;
 
 			if (caretIsSingle && !insertMode) {
 				const caretPosition = $newSelectionStart;
@@ -79,6 +82,8 @@
 		previousSelectionState[0] = s;
 		previousSelectionState[1] = e;
 		previousSelectionState[2] = d as SelectionDirection | undefined;
+		$globalSelectionStart = s;
+		$globalSelectionEnd = e;
 	};
 
 	const handleSelectionChange = () => {
@@ -103,7 +108,7 @@
 
 		if ($newValue !== $previousValue) {
 			value = $newValue;
-			$globalValues.otp.currentValue = $newValue;
+			$globalNewValue = $newValue;
 		}
 	});
 </script>
@@ -114,3 +119,5 @@
 	bind:value={$newValue}
 	maxlength={maxLength}
 />
+
+{@render children()}
