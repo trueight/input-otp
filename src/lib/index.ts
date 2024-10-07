@@ -1,5 +1,5 @@
-import Input from './components/input.svelte';
-import Group from './components/group.svelte';
-import Slot from './components/slot.svelte';
+import OTPInput from './components/input.svelte';
+import OTPGroup from './components/group.svelte';
+import OTPSlot from './components/slot.svelte';
 
-export { Input, Group, Slot };
+export { OTPInput, OTPGroup, OTPSlot };
