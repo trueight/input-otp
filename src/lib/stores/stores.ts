@@ -110,3 +110,8 @@ type Tuple<T, N extends number> = number extends N
 					: never
 				: never;
 	  }[N];
+
+export const globalNewValue = writable('');
+export const globalInsertMode = writable<boolean | undefined>(undefined);
+export const globalSelectionStart = writable<number>();
+export const globalSelectionEnd = writable<number>();
