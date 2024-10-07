@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { withPrevious } from '$lib/stores/stores.js';
-	import { globalNewValue, globalInsertMode, globalSelectionStart, globalSelectionEnd } from '$lib/stores/stores.js';
+	import {
+		globalNewValue,
+		globalInsertMode,
+		globalSelectionStart,
+		globalSelectionEnd
+	} from '$lib/stores/stores.js';
 	import type { Snippet } from 'svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
 	type SelectionState = [number, number, SelectionDirection | undefined];
@@ -8,10 +13,12 @@
 		maxLength: number;
 		value?: string;
 		children: Snippet;
+		class?: string;
+		inputZIndex?: number;
 	}
 
 	let inputElement: HTMLInputElement;
-	let { maxLength = 6, value = $bindable(''), children }: Props = $props();
+	let { maxLength = 6, value = $bindable(''), children, class: className, inputZIndex = 30 }: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
 	const [newSelectionEnd, previousSelectionEnd] = withPrevious(0);
@@ -113,11 +120,14 @@
 	});
 </script>
 
-<input
-	onselectionchange={handleSelectionChange}
-	bind:this={inputElement}
-	bind:value={$newValue}
-	maxlength={maxLength}
-/>
+<div class={className} style="display: flex; position: relative; ">
+	<input
+		style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: {inputZIndex};"
+		onselectionchange={handleSelectionChange}
+		bind:this={inputElement}
+		bind:value={$newValue}
+		maxlength={maxLength}
+	/>
 
-{@render children()}
+	{@render children()}
+</div>
