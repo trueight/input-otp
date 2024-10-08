@@ -21,6 +21,8 @@
 		inputZIndex?: number;
 		onComplete?: () => void;
 		onChange?: () => void;
+		onFocus?: () => void;
+		onBlur?: () => void;
 	}
 
 	let inputElement: HTMLInputElement;
@@ -31,7 +33,9 @@
 		class: className,
 		inputZIndex = 30,
 		onComplete,
-		onChange
+		onChange,
+		onFocus,
+		onBlur
 	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
@@ -145,6 +149,19 @@
 		}
 	};
 
+	const onFocusChange = {
+		focus: () => {
+			if (onFocus) {
+				onFocus();
+			}
+		},
+		blur: () => {
+			if (onBlur) {
+				onBlur();
+			}
+		}
+	}
+
 	$effect(() => {
 		if (
 			inputElement &&
@@ -173,6 +190,8 @@
 	<input
 		style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: {inputZIndex};"
 		onselectionchange={handleSelectionChange}
+		onfocus={onFocusChange.focus}
+		onblur={onFocusChange.blur}
 		bind:this={inputElement}
 		bind:value={$newValue}
 		maxlength={maxLength}
