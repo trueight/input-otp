@@ -23,6 +23,7 @@
 		onChange?: () => void;
 		onFocus?: () => void;
 		onBlur?: () => void;
+		autofocus?: boolean;
 	}
 
 	let inputElement: HTMLInputElement;
@@ -35,7 +36,8 @@
 		onComplete,
 		onChange,
 		onFocus,
-		onBlur
+		onBlur,
+		autofocus
 	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
@@ -74,6 +76,9 @@
 	): boolean =>
 		newSelectionStart === newValue.length &&
 		newValue.length < maxLength;
+
+	//I'm not satisfied with having to use global states, previous states, local states, arrays with more states, and all that
+	//I think it needs a refactoring, if you know a way to improve this, I'd be happy to hear
 
 	const onSelectionChange = () => {
 		let selectionStart: number = -1;
@@ -187,9 +192,11 @@
 </script>
 
 <div class={className} style="display: flex; position: relative; ">
+	<!-- svelte-ignore a11y_autofocus -->
 	<input
 		style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: {inputZIndex};"
 		onselectionchange={handleSelectionChange}
+		autofocus={autofocus}
 		onfocus={onFocusChange.focus}
 		onblur={onFocusChange.blur}
 		bind:this={inputElement}
