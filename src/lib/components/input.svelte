@@ -8,7 +8,11 @@
 	} from '$lib/stores/stores.js';
 	import type { Snippet } from 'svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
-	type SelectionState = [number, number, SelectionDirection | undefined];
+	type SelectionState = [
+		number,
+		number,
+		SelectionDirection | undefined
+	];
 	interface Props {
 		maxLength: number;
 		value?: string;
@@ -19,11 +23,19 @@
 	}
 
 	let inputElement: HTMLInputElement;
-	let { maxLength = 6, value = $bindable(''), children, class: className, inputZIndex = 30, onComplete }: Props = $props();
+	let {
+		maxLength = 6,
+		value = $bindable(''),
+		children,
+		class: className,
+		inputZIndex = 30,
+		onComplete
+	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
 	const [newSelectionEnd, previousSelectionEnd] = withPrevious(0);
-	const [newSelectionDirection, previousSelectionDirection] = withPrevious('none');
+	const [newSelectionDirection, previousSelectionDirection] =
+		withPrevious('none');
 	const previousSelectionState: SelectionState = [
 		$previousSelectionStart ?? 0,
 		$previousSelectionEnd ?? 0,
@@ -45,19 +57,29 @@
 		}
 	};
 
-	const isSingleCaret = (newSelectionStart: number, newSelectionEnd: number): boolean =>
-		newSelectionStart === newSelectionEnd;
+	const isSingleCaret = (
+		newSelectionStart: number,
+		newSelectionEnd: number
+	): boolean => newSelectionStart === newSelectionEnd;
 
-	const isInsertMode = (newSelectionStart: number, newValue: string): boolean =>
-		newSelectionStart === newValue.length && newValue.length < maxLength;
+	const isInsertMode = (
+		newSelectionStart: number,
+		newValue: string
+	): boolean =>
+		newSelectionStart === newValue.length &&
+		newValue.length < maxLength;
 
 	const onSelectionChange = () => {
 		let selectionStart: number = -1;
 		let selectionEnd: number = -1;
-		let selectionDirection: SelectionDirection | undefined = undefined;
+		let selectionDirection: SelectionDirection | undefined =
+			undefined;
 
 		if ($newValue.length !== 0) {
-			const caretIsSingle = isSingleCaret($newSelectionStart, $newSelectionEnd);
+			const caretIsSingle = isSingleCaret(
+				$newSelectionStart,
+				$newSelectionEnd
+			);
 			const insertMode = isInsertMode($newSelectionStart, $newValue);
 			$globalInsertMode = insertMode;
 
@@ -74,11 +96,17 @@
 				} else if (maxLength > 1 && $newValue.length > 1) {
 					let offset = 0;
 					const [previousStart, previousEnd] = previousSelectionState;
-					const wasPreviouslyInserting = previousStart === previousEnd && previousStart < maxLength;
+					const wasPreviouslyInserting =
+						previousStart === previousEnd &&
+						previousStart < maxLength;
 
-					selectionDirection = caretPosition < previousEnd ? 'backward' : 'forward';
+					selectionDirection =
+						caretPosition < previousEnd ? 'backward' : 'forward';
 
-					if (!wasPreviouslyInserting && selectionDirection === 'backward') {
+					if (
+						!wasPreviouslyInserting &&
+						selectionDirection === 'backward'
+					) {
 						offset = -1;
 					}
 
@@ -86,9 +114,14 @@
 					selectionEnd = caretPosition + offset + 1;
 				}
 			}
-			updateSelectionRange(selectionStart, selectionEnd, selectionDirection);
+			updateSelectionRange(
+				selectionStart,
+				selectionEnd,
+				selectionDirection
+			);
 		}
-		const s = selectionStart !== -1 ? selectionStart : $newSelectionStart;
+		const s =
+			selectionStart !== -1 ? selectionStart : $newSelectionStart;
 		const e = selectionEnd !== -1 ? selectionEnd : $newSelectionEnd;
 		const d = selectionDirection ?? $newSelectionDirection;
 
