@@ -36,8 +36,8 @@
 				: false;
 
 		return single || range
-			? className + ' sdf ' + focusClass
-			: className;
+			? 'slot__default ' + className + ' ' + focusClass
+			: 'slot__default ' + className;
 	};
 
 	const getCaret = (index: number) => {
@@ -63,7 +63,6 @@
 		{/if}
 	</div>
 {:else}
-	<!-- i have to find a way to use highlightSingle() inside this shit -->
 	{#each index as index}
 		<div class={getClass(index)}>
 			{#if getCaret(index)}
@@ -74,3 +73,11 @@
 		</div>
 	{/each}
 {/if}
+
+<!-- this helps to render input even if no size style is applied to slots -->
+<style>
+	.slot__default {
+		width: 40px;
+		height: 40px;
+	}
+</style>
