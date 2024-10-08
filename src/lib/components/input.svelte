@@ -29,6 +29,11 @@
 		($previousSelectionDirection as SelectionDirection) ?? undefined
 	];
 
+	// initial global state
+	$globalSelectionStart = $newSelectionStart;
+	$globalSelectionEnd = $newSelectionEnd;
+	$globalInsertMode = true;
+
 	const updateSelectionRange = (
 		start: number,
 		end: number,
@@ -117,6 +122,8 @@
 			value = $newValue;
 			$globalNewValue = $newValue;
 		}
+
+		inputElement.focus
 	});
 </script>
 
