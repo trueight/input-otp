@@ -24,6 +24,7 @@
 		onFocus?: () => void;
 		onBlur?: () => void;
 		autofocus?: boolean;
+		disabled?: boolean;
 	}
 
 	let inputElement: HTMLInputElement;
@@ -37,7 +38,8 @@
 		onChange,
 		onFocus,
 		onBlur,
-		autofocus
+		autofocus,
+		disabled
 	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
@@ -165,7 +167,7 @@
 				onBlur();
 			}
 		}
-	}
+	};
 
 	$effect(() => {
 		if (
@@ -191,12 +193,18 @@
 	});
 </script>
 
-<div class={className} style="display: flex; position: relative; ">
+<div
+	class={disabled
+		? 'input__container__default ' + className + ' disabled'
+		: 'input__container__default ' + className}
+>
 	<!-- svelte-ignore a11y_autofocus -->
 	<input
-		style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: {inputZIndex};"
+		style={inputZIndex ? `z-index: ${inputZIndex};` : ''}
+		class="input__default"
+		{disabled}
 		onselectionchange={handleSelectionChange}
-		autofocus={autofocus}
+		{autofocus}
 		onfocus={onFocusChange.focus}
 		onblur={onFocusChange.blur}
 		bind:this={inputElement}
@@ -206,3 +214,24 @@
 
 	{@render children()}
 </div>
+
+<style>
+	.input__container__default {
+		display: flex;
+		position: relative;
+	}
+
+	.input__default {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		z-index: 30;
+	}
+
+	.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+</style>
