@@ -193,11 +193,7 @@
 	});
 </script>
 
-<div
-	class={disabled
-		? 'input__container__default ' + className + ' disabled'
-		: 'input__container__default ' + className}
->
+<div class={'input__container__default ' + className}>
 	<!-- svelte-ignore a11y_autofocus -->
 	<input
 		style={inputZIndex ? `z-index: ${inputZIndex};` : ''}
@@ -228,10 +224,5 @@
 		height: 100%;
 		opacity: 0;
 		z-index: 30;
-	}
-
-	.disabled {
-		opacity: 0.5;
-		pointer-events: none;
 	}
 </style>

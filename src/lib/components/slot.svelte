@@ -35,9 +35,7 @@
 				? true
 				: false;
 
-		return single || range
-			? 'slot__default ' + className + ' ' + focusClass
-			: 'slot__default ' + className;
+		return single || range ? className + ' ' + focusClass : className;
 	};
 
 	const getCaret = (index: number) => {
@@ -73,11 +71,3 @@
 		</div>
 	{/each}
 {/if}
-
-<!-- this helps to render input even if no size style is applied to slots -->
-<style>
-	.slot__default {
-		width: 40px;
-		height: 40px;
-	}
-</style>
