@@ -20,6 +20,7 @@
 		class?: string;
 		inputZIndex?: number;
 		onComplete?: () => void;
+		onChange?: () => void;
 	}
 
 	let inputElement: HTMLInputElement;
@@ -29,7 +30,8 @@
 		children,
 		class: className,
 		inputZIndex = 30,
-		onComplete
+		onComplete,
+		onChange
 	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
@@ -159,6 +161,10 @@
 
 		if ($newValue.length === maxLength && onComplete) {
 			onComplete();
+		}
+
+		if ($newValue && $previousValue !== $newValue && onChange) {
+			onChange();
 		}
 	});
 </script>
