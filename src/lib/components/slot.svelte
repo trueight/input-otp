@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import {
 		globalNewValue,
 		globalInsertMode,
@@ -9,31 +10,67 @@
 		index: number[] | number;
 		class?: string;
 		focusClass?: string;
+		Caret?: Component;
 	}
 
-	const { index, class: className, focusClass: focusClassName }: Props = $props();
+	const {
+		index,
+		class: className,
+		focusClass,
+		Caret
+	}: Props = $props();
+
+	const getClass = (index: number) => {
+		const single =
+			$globalInsertMode &&
+			$globalSelectionStart === index &&
+			$globalSelectionEnd === index
+				? true
+				: false;
+
+		const range =
+			!$globalInsertMode &&
+			index >= $globalSelectionStart &&
+			index < $globalSelectionEnd
+				? true
+				: false;
+
+		return single || range
+			? className + ' sdf ' + focusClass
+			: className;
+	};
+
+	const getCaret = (index: number) => {
+		const showCaret =
+			$globalInsertMode &&
+			$globalSelectionStart === index &&
+			$globalSelectionEnd === index &&
+			Caret &&
+			!$globalNewValue[index]
+				? true
+				: false;
+
+		return showCaret;
+	};
 </script>
 
 {#if typeof index === 'number'}
-	<div
-		class={(globalInsertMode && $globalSelectionStart === index && $globalSelectionEnd === index) ||
-		(!$globalInsertMode && index >= $globalSelectionStart && index < $globalSelectionEnd)
-			? className + ' ' + focusClassName
-			: className}
-	>
-		{$globalNewValue[index]}
+	<div class={getClass(index)}>
+		{#if getCaret(index)}
+			<Caret />
+		{:else}
+			{$globalNewValue[index]}
+		{/if}
 	</div>
 {:else}
+	<!-- i have to find a way to use highlightSingle() inside this shit -->
 	{#each index as index}
-		<div
-			class={
-				(globalInsertMode && $globalSelectionStart === index && $globalSelectionEnd === index) ||
-				(!$globalInsertMode && index >= $globalSelectionStart && index < $globalSelectionEnd)
-					? className + ' ' + focusClassName
-					: className
-			}
-		>
-			{$globalNewValue[index]}
+		<div class={getClass(index)}>
+			{#if getCaret(index)}
+				<Caret />
+			{:else}
+				{$globalNewValue[index]}
+			{/if}
 		</div>
 	{/each}
 {/if}
