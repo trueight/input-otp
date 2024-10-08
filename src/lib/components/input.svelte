@@ -15,10 +15,11 @@
 		children: Snippet;
 		class?: string;
 		inputZIndex?: number;
+		onComplete?: () => void;
 	}
 
 	let inputElement: HTMLInputElement;
-	let { maxLength = 6, value = $bindable(''), children, class: className, inputZIndex = 30 }: Props = $props();
+	let { maxLength = 6, value = $bindable(''), children, class: className, inputZIndex = 30, onComplete }: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
 	const [newSelectionEnd, previousSelectionEnd] = withPrevious(0);
@@ -123,7 +124,9 @@
 			$globalNewValue = $newValue;
 		}
 
-		inputElement.focus
+		if ($newValue.length === maxLength && onComplete) {
+			onComplete();
+		}
 	});
 </script>
 
