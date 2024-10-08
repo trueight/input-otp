@@ -6,13 +6,15 @@
 	let value = $state('');
 </script>
 
-<OTPInput bind:value maxLength={6}>
-	<OTPGroup>
-		<OTPSlot index={[0, 1, 2]} />
-	</OTPGroup>
-	<OTPGroup>
-		<OTPSlot index={3} />
-		<OTPSlot index={4} />
-		<OTPSlot index={5} />
-	</OTPGroup>
-</OTPInput>
+<div style="display: flex;">
+	<OTPInput bind:value maxLength={6} disabled>
+		<OTPGroup>
+			<OTPSlot class="sdf" index={[0, 1, 2]} />
+		</OTPGroup>
+		<OTPGroup>
+			<OTPSlot index={3} />
+			<OTPSlot index={4} />
+			<OTPSlot index={5} />
+		</OTPGroup>
+	</OTPInput>
+</div>
