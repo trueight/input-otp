@@ -4,7 +4,8 @@
 		globalNewValue,
 		globalInsertMode,
 		globalSelectionStart,
-		globalSelectionEnd
+		globalSelectionEnd,
+		inputInFocus
 	} from '$lib/stores/stores.js';
 	import type { Snippet } from 'svelte';
 	type SelectionDirection = 'none' | 'forward' | 'backward';
@@ -56,6 +57,7 @@
 	$globalSelectionStart = $newSelectionStart;
 	$globalSelectionEnd = $newSelectionEnd;
 	$globalInsertMode = true;
+	$inputInFocus = autofocus;
 
 	const updateSelectionRange = (
 		start: number,
@@ -161,11 +163,13 @@
 			if (onFocus) {
 				onFocus();
 			}
+			$inputInFocus = true;
 		},
 		blur: () => {
 			if (onBlur) {
 				onBlur();
 			}
+			$inputInFocus = false;
 		}
 	};
 

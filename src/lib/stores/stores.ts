@@ -115,3 +115,4 @@ export const globalNewValue = writable('');
 export const globalInsertMode = writable<boolean | undefined>(undefined);
 export const globalSelectionStart = writable<number>();
 export const globalSelectionEnd = writable<number>();
+export const inputInFocus = writable<boolean | undefined>(undefined);
