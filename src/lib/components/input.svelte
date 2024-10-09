@@ -206,6 +206,7 @@
 		bind:this={inputElement}
 		bind:value={$newValue}
 		maxlength={maxLength}
+		autocomplete="one-time-code"
 	/>
 
 	{@render children()}
