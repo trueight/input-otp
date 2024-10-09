@@ -43,6 +43,7 @@
 
 	const getCaret = (index: number) => {
 		const showCaret =
+		  $inputInFocus &&
 			$globalInsertMode &&
 			$globalSelectionStart === index &&
 			$globalSelectionEnd === index &&
