@@ -26,6 +26,8 @@
 		onBlur?: () => void;
 		autofocus?: boolean;
 		disabled?: boolean;
+		pattern?: RegExp;
+		patternCallback?: () => void;
 	}
 
 	let inputElement: HTMLInputElement;
@@ -40,7 +42,9 @@
 		onFocus,
 		onBlur,
 		autofocus,
-		disabled
+		disabled,
+		pattern,
+		patternCallback
 	}: Props = $props();
 	const [newValue, previousValue] = withPrevious(value);
 	const [newSelectionStart, previousSelectionStart] = withPrevious(0);
@@ -158,7 +162,14 @@
 		}
 	};
 
-	const onFocusChange = {
+	const handleKeyPress = (event: KeyboardEvent) => {
+		if (pattern && !pattern.test(event.key)) {
+			event.preventDefault();
+			patternCallback?.();
+		}
+	};
+
+	const handleFocusChange = {
 		focus: () => {
 			if (onFocus) {
 				onFocus();
@@ -205,8 +216,9 @@
 		{disabled}
 		onselectionchange={handleSelectionChange}
 		{autofocus}
-		onfocus={onFocusChange.focus}
-		onblur={onFocusChange.blur}
+		onfocus={handleFocusChange.focus}
+		onblur={handleFocusChange.blur}
+		onkeypress={handleKeyPress}
 		bind:this={inputElement}
 		bind:value={$newValue}
 		maxlength={maxLength}
