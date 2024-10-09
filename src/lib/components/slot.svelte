@@ -4,7 +4,8 @@
 		globalNewValue,
 		globalInsertMode,
 		globalSelectionStart,
-		globalSelectionEnd
+		globalSelectionEnd,
+		inputInFocus
 	} from '$lib/stores/stores.js';
 	interface Props {
 		index: number[] | number;
@@ -22,6 +23,7 @@
 
 	const getClass = (index: number) => {
 		const single =
+			$inputInFocus &&
 			$globalInsertMode &&
 			$globalSelectionStart === index &&
 			$globalSelectionEnd === index
@@ -29,6 +31,7 @@
 				: false;
 
 		const range =
+			$inputInFocus &&
 			!$globalInsertMode &&
 			index >= $globalSelectionStart &&
 			index < $globalSelectionEnd
